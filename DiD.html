@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data.Insight.Decision - Formations en Analyse de Données</title>
+    <style>
+        /* Styles généraux et de mise en page */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+
+        /* Navigation des onglets */
+        .tab-nav {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #7f8c8d;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+        .tab-btn:hover {
+            color: #34495e;
+        }
+
+        /* Contenu des onglets */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Styles de la brochure de formation */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            line-height: 1.2;
+            word-break: break-word;
+        }
+        .header .subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+        .feature {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px 15px;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        .feature:hover { transform: translateY(-3px); }
+        .feature-icon { font-size: 2.5rem; margin-bottom: 12px; display: block; }
+        .feature h3 { font-size: 1.1rem; margin-bottom: 8px; color: #2c3e50; }
+        .feature p { font-size: 0.9rem; color: #666; line-height: 1.3; }
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            margin: 20px 0;
+            padding: 25px 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            word-wrap: break-word;
+        }
+        .section h2 {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+            line-height: 1.3;
+        }
+        .section h2::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin: 12px auto;
+            border-radius: 2px;
+        }
+        .section p { font-size: 1rem; line-height: 1.6; margin-bottom: 15px; text-align: justify; hyphens: auto; -webkit-hyphens: auto; }
+        .modules { display: grid; gap: 20px; }
+        .module {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px 15px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        .module:hover { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); transform: translateY(-2px); }
+        .module h3 { font-size: 1.3rem; color: #2c3e50; margin-bottom: 12px; display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .module-number {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        .module-objective {
+            background: #e3f2fd;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 12px 0;
+            font-style: italic;
+            border-left: 3px solid #2196f3;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        .module-objective strong { color: #1976d2; }
+        .skills { margin: 15px 0; }
+        .skills h4 { font-size: 1.1rem; color: #2c3e50; margin-bottom: 12px; }
+        .skills ul { list-style: none; display: grid; grid-template-columns: 1fr; gap: 8px; }
+        .skills li {
+            padding: 8px 12px;
+            background: #e8f5e8;
+            border-radius: 20px;
+            color: #2e7d32;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: flex-start;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+        .skills li::before { content: '✓'; margin-right: 8px; font-weight: bold; color: #4caf50; flex-shrink: 0; margin-top: 1px; }
+        .pricing { display: flex; justify-content: center; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+        .price-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 150px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            flex: 1;
+            max-width: 180px;
+        }
+        .price-card:hover { transform: translateY(-3px); }
+        .price-card.premium { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .price-card div:first-child { font-size: 0.9rem; margin-bottom: 8px; opacity: 0.9; }
+        .price-amount { font-size: 1.4rem; font-weight: bold; line-height: 1.2; }
+        .target-audience { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
+        .audience-card {
+            background: #f3e5f5;
+            padding: 20px 15px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid #e1bee7;
+            transition: all 0.3s ease;
+        }
+        .audience-card:hover { border-color: #9c27b0; transform: translateY(-2px); }
+        .audience-card h3 { font-size: 1.1rem; margin-bottom: 10px; color: #2c3e50; }
+        .audience-card p { font-size: 0.9rem; color: #666; line-height: 1.4; text-align: center; }
+        .premium-benefits {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            padding: 20px 15px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 2px solid #ffcc02;
+        }
+        .premium-benefits h3 { color: #e65100; margin-bottom: 15px; text-align: center; font-size: 1.2rem; }
+        .premium-benefits ul { list-style: none; display: grid; grid-template-columns: 1fr; gap: 10px; }
+        .premium-benefits li {
+            padding: 10px 15px;
+            background: rgba(255, 193, 7, 0.2);
+            border-radius: 20px;
+            display: flex;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        .premium-benefits li::before { content: '⭐'; margin-right: 10px; font-size: 1.1rem; flex-shrink: 0; }
+        .contact-section {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            text-align: center;
+        }
+        .contact-section h2 { color: white; }
+        .contact-info { display: grid; grid-template-columns: 1fr; gap: 20px; margin: 25px 0; }
+        .contact-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px 15px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            color: white;
+        }
+        .contact-item h3 {
+            margin-bottom: 12px;
+            color: #ecf0f1;
+            font-size: 1.1rem;
+        }
+        .contact-item a {
+            color: #3498db;
+            text-decoration: none;
+            word-break: break-all;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        .contact-item a:hover { color: #5dade2; }
+        .company-header { display: flex; align-items: center; justify-content: flex-start; margin-bottom: 25px; gap: 15px; flex-wrap: wrap; }
+        .company-logo {
+            max-width: 60px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+        .company-logo:hover { transform: scale(1.05); }
+        .company-header h2 { margin: 0; font-size: 1.3rem; color: #2c3e50; flex: 1; min-width: 200px; }
+        .company-header h2::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin: 12px 0;
+            border-radius: 2px;
+        }
+        .company-story {
+            max-width: 100%;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: rgb(6, 16, 39);
+            padding: 20px 15px;
+            border-radius: 12px;
+            text-align: justify;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+        .story-highlight h3 { margin: 0 0 15px 0; font-size: 1.1rem; font-weight: 600; text-align: center; }
+        .company-story p { font-size: 1rem; line-height: 1.6; hyphens: auto; -webkit-hyphens: auto; }
+        .mission-statement, .approach-methodology, .value-proposition, .instructor-credentials {
+            background: #f8f9fa;
+            padding: 20px 15px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+        .mission-statement:hover, .approach-methodology:hover, .value-proposition:hover, .instructor-credentials:hover { transform: translateX(3px); box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1); }
+        .mission-statement h4, .approach-methodology h4, .value-proposition h4, .instructor-credentials h4 { color: #2c3e50; margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .mission-statement { border-left-color: #e74c3c; }
+        .approach-methodology { border-left-color: #f39c12; }
+        .value-proposition { border-left-color: #27ae60; }
+        .instructor-credentials { border-left-color: #9b59b6; }
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 15px 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            font-size: 0.95rem;
+            text-align: center;
+            min-width: 200px;
+        }
+        .cta-button:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); }
+        .format-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .format-item {
+            background: #f8f9fa;
+            padding: 20px 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        .format-item h3 { font-size: 1.1rem; color: #2c3e50; margin-bottom: 10px; }
+        .format-item p { font-size: 0.95rem; line-height: 1.5; color: #666; text-align: left; }
+        
+        /* Styles de la page "A Propos" */
+        .about-section h3 {
+            font-size: 2rem;
+            color: #2c3e50;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .about-founder {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        .founder-photo {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #667eea;
+            flex-shrink: 0;
+        }
+        .about-text { flex: 1; }
+        .expertise-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+        .expertise-list li {
+            padding: 5px 0;
+            font-size: 1.1rem;
+            color: #555;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .expertise-list li::before { content: '✔️'; color: #667eea; font-weight: bold; }
+        .clients-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .clients-list li {
+            background: #f1f3f4;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        /* Styles de la page "CONTACT" */
+        .contact-section h3 {
+            font-size: 2rem;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+        .contact-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        .contact-card:hover { transform: translateY(-5px); }
+        .contact-card h4 {
+            font-size: 1.5rem;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        .contact-card a {
+            color: #34495e;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+        .contact-card a:hover { text-decoration: underline; }
+
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            body { font-size: 15px; }
+            .container { padding: 10px; }
+            .header { padding: 20px 15px; margin-bottom: 15px; border-radius: 12px; }
+            .header h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 12px; }
+            .header .subtitle { font-size: 1rem; margin-bottom: 20px; }
+            .section { padding: 20px 15px; margin: 15px 0; border-radius: 12px; }
+            .section h2 { font-size: 1.5rem; margin-bottom: 15px; }
+            .features { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+            .feature { padding: 15px 10px; }
+            .feature-icon { font-size: 2rem; margin-bottom: 10px; }
+            .feature h3 { font-size: 1rem; }
+            .feature p { font-size: 0.85rem; }
+            .module { padding: 15px 12px; }
+            .module h3 { font-size: 1.2rem; flex-direction: column; align-items: flex-start; gap: 8px; }
+            .module-number { width: 30px; height: 30px; font-size: 0.9rem; }
+            .skills li { font-size: 0.8rem; padding: 6px 10px; }
+            .pricing { flex-direction: column; align-items: center; gap: 10px; }
+            .price-card { max-width: 100%; min-width: 200px; }
+            .target-audience { grid-template-columns: 1fr; gap: 12px; }
+            .audience-card { padding: 15px 12px; }
+            .contact-info { gap: 15px; }
+            .contact-item { padding: 15px 12px; }
+            .company-header { flex-direction: column; text-align: center; gap: 12px; }
+            .company-header h2 { font-size: 1.2rem; min-width: auto; }
+            .company-header h2::after { margin: 10px auto; }
+            .company-logo { max-width: 50px; }
+            .company-story { padding: 15px 12px; text-align: justify; }
+            .story-highlight h3 { font-size: 1rem; margin-bottom: 12px; }
+            .mission-statement, .approach-methodology, .value-proposition, .instructor-credentials { padding: 15px 12px; margin: 12px 0; }
+            .mission-statement h4, .approach-methodology h4, .value-proposition h4, .instructor-credentials h4 { font-size: 1rem; flex-direction: column; align-items: flex-start; gap: 5px; }
+            .cta-button { padding: 10px 25px; font-size: 0.9rem; min-width: 180px; margin: 10px 0; }
+            .format-grid { gap: 15px; }
+            .format-item { padding: 15px 12px; }
+            .premium-benefits { padding: 15px 12px; }
+            .premium-benefits li { padding: 8px 12px; font-size: 0.85rem; }
+        }
+
+        /* Very small screens */
+        @media (max-width: 480px) {
+            .header h1 { font-size: 1.6rem; }
+            .section h2 { font-size: 1.3rem; }
+            .features { grid-template-columns: 1fr; }
+            .skills ul { gap: 6px; }
+            .company-story p { font-size: 0.95rem; }
+        }
+
+        /* Print styles */
+        @media print {
+            body { background: white !important; color: black !important; font-size: 12pt !important; }
+            .section { page-break-before: always; page-break-inside: avoid; background: white !important; box-shadow: none !important; backdrop-filter: none !important; margin: 0 !important; padding: 20px !important; border-radius: 0 !important; }
+            .header { page-break-before: avoid; background: white !important; box-shadow: none !important; backdrop-filter: none !important; }
+            .module { page-break-inside: avoid; background: #f8f9fa !important; box-shadow: none !important; }
+            .price-card { background: #f0f0f0 !important; color: black !important; box-shadow: none !important; }
+            .contact-section { background: #f5f5f5 !important; color: black !important; }
+            .contact-section h2 { color: black !important; }
+            .company-story { background: #e8e8e8 !important; color: black !important; box-shadow: none !important; }
+            .premium-benefits { background: #f9f9f9 !important; border: 1px solid #ddd !important; }
+            .cta-button { background: #666 !important; color: white !important; box-shadow: none !important; }
+        }
+
+        /* Styles de la page "A Propos" */
+        .about-section h3 {
+            font-size: 2rem;
+            color: #2c3e50;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .about-founder {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        .founder-photo {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #667eea;
+            flex-shrink: 0;
+        }
+        .about-text { flex: 1; }
+        .expertise-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+        .expertise-list li {
+            padding: 5px 0;
+            font-size: 1.1rem;
+            color: #555;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .expertise-list li::before { content: '✔️'; color: #667eea; font-weight: bold; }
+        .clients-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .clients-list li {
+            background: #f1f3f4;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        /* Styles de la page "CONTACT" */
+        .contact-section h3 {
+            font-size: 2rem;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+        .contact-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        .contact-card:hover { transform: translateY(-5px); }
+        .contact-card h4 {
+            font-size: 1.5rem;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        .contact-card a {
+            color: #34495e;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+        .contact-card a:hover { text-decoration: underline; }
+
+        /* Style pour le logo de couverture */
+        .logo-cover {
+            display: block;
+            margin: 0 auto 10px auto; /* Centre l'image et ajoute de l'espace en dessous */
+            max-width: 75%; /* Taille maximale du logo 250px */ 
+            height: 300px; /* auto */
+        }
+        .prix-barre {
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="tab-nav">
+            <button class="tab-btn active" onclick="showTab('formations')">FORMATIONS</button>
+            <button class="tab-btn" onclick="showTab('about')">À PROPOS</button>
+            <button class="tab-btn" onclick="showTab('contact')">CONTACT</button>
+        </nav>
+
+        <div id="formations" class="tab-content active">
+            <img src="logo2.png" alt="Data.Insight.Decision Logo" class="logo-cover">
+            <div class="container">
+                <div class="header">
+                    <h1>Formation Analyse de Données</h1>
+                    <p class="subtitle">Transformez vos données en décisions stratégiques</p>
+                    
+                    <div class="features">
+                        <div class="feature">
+                            <div class="feature-icon">🎯</div>
+                            <h3>100% Pratique</h3>
+                            <p>Zéro blabla inutile, que du concret</p>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">👨‍🏫</div>
+                            <h3>Expert Certifié</h3>
+                            <p>Encadré par un expert en Data & IA</p>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">🚀</div>
+                            <h3>Suivi Personnalisé</h3>
+                            <p>Coaching individuel inclus</p>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">💼</div>
+                            <h3>Projets Métiers</h3>
+                            <p>Cas concrets d'entreprises réelles</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Pourquoi ces formations ?</h2>
+                    <p>
+                        Les données sont aujourd'hui au cœur de toutes les décisions stratégiques. Que vous soyez débutant, professionnel, entrepreneur ou étudiant, maîtriser leur manipulation, leur analyse et leur visualisation vous donnera un avantage décisif dans votre carrière.
+                    </p>
+                </div>
+
+                <div class="section">
+                    <h2>Modules de Formation</h2>
+                    <p style="text-align: center; margin-bottom: 25px; font-style: italic;">
+                        Chaque formation est indépendante : choisissez ce qui vous intéresse, sans obligation de suivre tous les modules.
+                    </p>
+                    
+                    <div class="modules">
+                        <div class="module">
+                            <h3><span class="module-number">0</span>Excel pour analyse des données</h3>
+                            <div class="module-objective">
+                                <strong>Objectif :</strong> Maîtriser les bases indispensables d'Excel pour gérer, structurer et analyser des données simplement.
+                            </div>
+                            <div class="skills">
+                                <h4>Compétences développées :</h4>
+                                <ul>
+                                    <li>Formules de base (SOMME, MOYENNE, SI, RECHERCHEV, etc.)</li>
+                                    <li>Mise en forme conditionnelle</li>
+                                    <li>Tableaux croisés dynamiques</li>
+                                    <li>Graphiques simples</li>
+                                    <li>Nettoyage et structuration de données</li>
+                                </ul>
+                            </div>
+                            <div class="pricing">
+                                <div class="price-card">
+                                    <div>Version Basique</div>
+                                    <div class="prix-barre">50 000 FCFA</div>
+                                    <div class="price-amount">10 000 FCFA</div>
+                                </div>
+                                <div class="price-card premium">
+                                    <div>Version Premium</div>
+                                    <div class="prix-barre">100 000 FCFA</div>
+                                    <div class="price-amount">20 000 FCFA</div>
+                                </div>
+                                <a href="https://forms.gle/Dc6GrTEeocmjs6hk7" target="_blank" class="cta-button">
+                                    🚀 S'inscrire maintenant
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="module">
+                            <h3><span class="module-number">1</span>Python et manipulation de gros volume de données</h3>
+                            <div class="module-objective">
+                                <strong>Objectif :</strong> Savoir utiliser la bibliothèque Pandas (Python) pour importer, transformer, nettoyer et structurer les données efficacement.
+                            </div>
+                            <div class="skills">
+                                <h4>Compétences développées :</h4>
+                                <ul>
+                                    <li>Chargement et exploration de fichiers CSV/Excel</li>
+                                    <li>Nettoyage de données manquantes ou aberrantes</li>
+                                    <li>Filtrage, tri et regroupement</li>
+                                    <li>Fusion de datasets</li>
+                                    <li>Transformation de colonnes</li>
+                                </ul>
+                            </div>
+                            <div class="pricing">
+                                <div class="price-card">
+                                    <div>Version Basique</div>
+                                    <div class="prix-barre">75 000 FCFA</div>
+                                    <div class="price-amount">15 000 FCFA</div>
+                                </div>
+                                <div class="price-card premium">
+                                    <div>Version Premium</div>
+                                    <div class="prix-barre">125 000 FCFA</div>
+                                    <div class="price-amount">25 000 FCFA</div>
+                                </div>
+                                <a href="https://forms.gle/NSuC1iJ5yqsqQrtg8" target="_blank" class="cta-button">
+                                    🚀 S'inscrire maintenant
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="module">
+                            <h3><span class="module-number">2</span>Python et calculs d'indicateurs métiers</h3>
+                            <div class="module-objective">
+                                <strong>Objectif :</strong> Maîtriser les calculs statistiques, les calculs matriciels et indicateurs métiers courants (ratios, moyennes pondérées, etc.)
+                            </div>
+                            <div class="skills">
+                                <h4>Compétences développées :</h4>
+                                <ul>
+                                    <li>Statistiques descriptives (moyenne, médiane, écart-type etc.)</li>
+                                    <li>Calculs groupés par catégories</li>
+                                    <li>Création d'indicateurs personnalisés</li>
+                                    <li>Analyse de performance</li>
+                                    <li>Tableaux de bord avec résumé chiffré</li>
+                                </ul>
+                            </div>
+                            <div class="pricing">
+                                <div class="price-card">
+                                    <div>Version Basique</div>
+                                    <div class="prix-barre">75 000 FCFA</div>
+                                    <div class="price-amount">15 000 FCFA</div>
+                                </div>
+                                <div class="price-card premium">
+                                    <div>Version Premium</div>
+                                    <div class="prix-barre">125 000 FCFA</div>
+                                    <div class="price-amount">25 000 FCFA</div>
+                                </div>
+                                <a href="https://forms.gle/NSuC1iJ5yqsqQrtg8" target="_blank" class="cta-button">
+                                    🚀 S'inscrire maintenant
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="module">
+                            <h3><span class="module-number">3</span>Python et Visualisation des données</h3>
+                            <div class="module-objective">
+                                <strong>Objectif :</strong> Apprendre à raconter des histoires avec les données à travers des visualisations impactantes.
+                            </div>
+                            <div class="skills">
+                                <h4>Compétences développées :</h4>
+                                <ul>
+                                    <li>Création de graphiques pertinents (barres, courbes, secteurs…)</li>
+                                    <li>Visualisation interactive avec Matplotlib, Seaborn ou Plotly</li>
+                                    <li>Choix des bonnes visualisations selon les objectifs</li>
+                                    <li>Création de dashboards clairs</li>
+                                    <li>Communication des résultats à un public non technique</li>
+                                </ul>
+                            </div>
+                            <div class="pricing">
+                                <div class="price-card">
+                                    <div>Version Basique</div>
+                                    <div class="prix-barre">75 000 FCFA</div>
+                                    <div class="price-amount">15 000 FCFA</div>
+                                </div>
+                                <div class="price-card premium">
+                                    <div>Version Premium</div>
+                                    <div class="prix-barre">125 000 FCFA</div>
+                                    <div class="price-amount">25 000 FCFA</div>
+                                </div>
+                                <a href="https://forms.gle/NSuC1iJ5yqsqQrtg8" target="_blank" class="cta-button">
+                                    🚀 S'inscrire maintenant
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>À qui s'adressent ces formations ?</h2>
+                    <div class="target-audience">
+                        <div class="audience-card">
+                            <h3>🎓 Étudiants</h3>
+                            <p>En économie, gestion, informatique, statistiques, etc.</p>
+                        </div>
+                        <div class="audience-card">
+                            <h3>👔 Professionnels</h3>
+                            <p>Souhaitant renforcer leur profil</p>
+                        </div>
+                        <div class="audience-card">
+                            <h3>🚀 Entrepreneurs</h3>
+                            <p>Et freelances en quête de nouvelles compétences</p>
+                        </div>
+                        <div class="audience-card">
+                            <h3>💡 Curieux</h3>
+                            <p>Toute personne motivée par la découverte du métier des données</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="premium-benefits">
+                        <h3>🌟 Avantages Version Premium</h3>
+                        <ul>
+                            <li>Suivi individuel avec l'expert</li>
+                            <li>Revue de vos projets et corrections personnalisées</li>
+                            <li>Conseils d'orientation (carrière, spécialisation)</li>
+                            <li>Projets métiers concrets (vente, RH, finance, logistique…)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Format & Modalités</h2>
+                    <div class="format-grid">
+                        <div class="format-item">
+                            <h3>📍 Localisation</h3>
+                            <p>Formation à distance (en ligne) ou présentielle selon la localisation et la disponibilité du participant</p>
+                        </div>
+                        <div class="format-item">
+                            <h3>📚 Supports</h3>
+                            <p>Accès aux supports (PDF, notebooks, vidéos) et séances en ligne avec le formateur</p>
+                        </div>
+                        <div class="format-item">
+                            <h3>⏱️ Durée</h3>
+                            <p>1 à 3 semaines par module, selon le rythme du participant et la densité du module</p>
+                        </div>
+                    </div>
+                </div>
+
+               
+            </div>
+        </div>
+
+        <div id="about" class="tab-content">
+            <img src="logo2.png" alt="Data.Insight.Decision Logo" class="logo-cover">
+            <div class="about-section">
+                
+                <div class="section">
+                    <div class="company-header">
+                        <img src="https://i.imgur.com/0kQgrcF.png" alt="Data.Insight.Decision" class="company-logo">
+                        <h2>À propos de nous...</h2>
+                    </div>
+                    
+                    <div class="company-story">
+                        <div class="story-highlight">
+                            <h3>🎯 Allier rigueur scientifique et impact concret</h3>
+                        </div>
+                        
+                        <p>
+                            Fondée par un expert combinant les compétences pointues de l'actuariat et de la science des données, notre entreprise révolutionne la formation en analyse de données. Nous transformons la manière dont les professionnels abordent les données, évaluent les risques et optimisent leurs décisions stratégiques.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="mission-statement">
+                        <h4>🚀 Notre Mission</h4>
+                        <p>
+                            <strong>Démocratiser l'excellence analytique.</strong> Nous rendons accessibles les outils mathématiques et statistiques les plus sophistiqués, en formant à leur utilisation concrète dans des environnements professionnels réels — finance, assurance, marketing, ou tout secteur guidé par la data.
+                        </p>
+                    </div>
+                    
+                    <div class="value-proposition">
+                        <h4>💡 Votre Transformation</h4>
+                        <p>
+                            Que vous soyez analyste, ingénieur, gestionnaire de risques ou porteur de projets data-driven, nos formations vous offrent bien plus qu'un bagage technique : <strong>nous développons votre intelligence analytique, votre vision stratégique, et votre capacité à créer de la valeur tangible à partir des données</strong>.
+                        </p>
+                    </div>
+                    
+                    <div class="instructor-credentials">
+                        <h4>👨‍🎓 Expertise du Formateur</h4>
+                        <p>
+                            Expert certifié en Data Science & Intelligence Artificielle, diplômé en Actuariat, avec plusieurs années d'expérience opérationnelle dans l'analyse de données pour des secteurs à enjeux critiques : assurance, finance, marketing digital, logistique optimisée.
+                        </p>
+                    </div>
+                </div>
+
+                <h3>À Propos du fondateur</h3>
+                <div class="about-founder">
+                    <img src="photo2.jpeg" alt="Photo du fondateur" class="founder-photo">
+                    <div class="about-text">
+                        <p>Actuaire et Data Scientist de formation, je mets aujourd’hui mon expertise en analyse de données, modélisation des risques et intelligence artificielle au service de l’innovation et du développement de solutions métiers ambitieuses.</p>
+                        <p>Fort d’un Master en Science Actuarielles et Mathématiques Financières (KU Leuven et Université d’Abomey-Calavi) complété par un Master en Intelligence Artificielle et Science des Données (Paris Dauphine-PSL), certifié en Intelligence Artificielle pour la finance par Sorbonne Université de Paris, j’ai développé une solide expérience dans l’application des techniques avancées de data science et d’actuariat pour résoudre des problématiques complexes.</p>
+                        <h4>Mon parcours m’a permis d’acquérir une expertise pointue en :</h4>
+                        <ul class="expertise-list">
+                            <li>Analyse de données : Extraction, traitement et interprétation des données pour en tirer des insights stratégiques.</li>
+                            <li>Modélisation des risques : Conception et optimisation de modèles prédictifs pour anticiper et gérer les risques.</li>
+                            <li>Développement de solutions métiers : Création d’outils et de plateformes sur mesure pour améliorer la performance opérationnelle et la prise de décision.</li>
+                        </ul>
+                        <p>Passionné par la transmission des savoirs, je propose également des formations sur mesure en analyse de données et modélisation des risques, adaptées aux besoins des professionnels et des organisations. Mon approche pédagogique allie théorie et pratique, avec un accent mis sur l’application concrète des concepts dans des cas réels.</p>
+                        <p>Aujourd’hui, je m’engage dans des projets innovants où je peux mettre à profit mes compétences techniques et mon esprit analytique pour développer des solutions performantes et accompagner les professionnels dans leur montée en compétences.</p>
+                        <p>Ma double expertise en actuariat et data science, combinée à mon engagement pour l’innovation et la formation, fait de moi un acteur clé dans la transformation data-driven des entreprises.</p>
+                    </div>
+                </div>
+                <h3>Nos Clients</h3>
+                <ul class="clients-list">
+                    <li>Particuliers</li>
+                    <li>Entreprises</li>
+                    <li>Centres de formation</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="contact" class="tab-content">
+            <img src="logo2.png" alt="Data.Insight.Decision Logo" class="logo-cover">
+            <div class="contact-section">
+                <div class="contact-info">
+                    <div class="contact-card">
+                        <h4>📧 Email</h4>
+                        <a href="mailto:quehdembestspace@gmail.com">quehdembestspace@gmail.com</a>
+                    </div>
+                    <div class="contact-card">
+                        <h4>📱 WhatsApp / Téléphone</h4>
+                        <a href="https://wa.me/+2290195449213" target="_blank">Contactez-nous sur WhatsApp</a>
+                    </div>
+                    <div class="contact-card">
+                        <h4>💼 LinkedIn</h4>
+                        <a href="https://www.linkedin.com/in/rod-migniha" target="_blank">linkedin.com/in/rod-migniha</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fonction pour changer d'onglet principal
+        function showTab(tabId) {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`.tab-btn[onclick="showTab('${tabId}')"]`).classList.add('active');
+        }
+
+        // Afficher le premier onglet par défaut
+        document.addEventListener('DOMContentLoaded', () => {
+            showTab('formations');
+        });
+    </script>
+</body>
+</html>
